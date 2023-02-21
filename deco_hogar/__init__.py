@@ -10,6 +10,8 @@ from .database import database as connection
 
 from .models import User, Role, UserRoles
 from .models import Client
+from .models import Item, ClientItem, Sale
+from .models import FrequencyPayment, Payment
 
 from .routers import users, clients_router
 
@@ -57,7 +59,8 @@ async def startup_event():
         connection.connect()
         print("Starting up...")
 
-    connection.create_tables([User, Role, UserRoles, Client])
+    connection.create_tables(
+        [User, Role, UserRoles, Client, Item, ClientItem, Sale, FrequencyPayment, Payment])
 
     # migrate(migrator.add_column('clients', 'user_created_id',
     #         ForeignKeyField(User, backref='clients_created', field=User.id, default=1)))
