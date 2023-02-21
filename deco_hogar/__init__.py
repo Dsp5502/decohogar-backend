@@ -9,10 +9,17 @@ from fastapi import status
 from .database import database as connection
 
 from .models import User, Role, UserRoles
+from .models import Client
 
-from .routers import users
+from .routers import users, clients_router
 
 from .common import create_acces_token
+
+from .migrations import migrator
+
+from peewee import CharField, DateTimeField, ForeignKeyField, Model
+
+from playhouse.migrate import migrate
 
 
 app = FastAPI(
@@ -24,6 +31,7 @@ app = FastAPI(
 api_v1 = APIRouter(prefix='/api/v1')
 
 api_v1.include_router(users.router)
+api_v1.include_router(clients_router)
 
 
 @api_v1.post('/auth')
@@ -49,7 +57,10 @@ async def startup_event():
         connection.connect()
         print("Starting up...")
 
-    connection.create_tables([User, Role, UserRoles])
+    connection.create_tables([User, Role, UserRoles, Client])
+
+    # migrate(migrator.add_column('clients', 'user_created_id',
+    #         ForeignKeyField(User, backref='clients_created', field=User.id, default=1)))
 
 
 @app.on_event("shutdown")

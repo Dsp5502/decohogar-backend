@@ -7,7 +7,7 @@ from ..schemas import UserRequestModel, UserResponseModel, RoleRequestModel, Use
 
 from ..models import User, Role, UserRoles
 
-from ..common import get_current_user, has_roles
+from ..common import has_roles
 
 router = APIRouter(prefix='/users')
 
@@ -51,8 +51,8 @@ async def add_role(role: RoleRequestModel, userRole: User = Depends(has_roles(['
     }
 
 
-# Ruta protegida que requiere un usuario con el rol "admin"
-@router.get('/admin')
-async def admin_route(userRole: User = Depends(has_roles(['admin']))):
-    print(f'userRole: {userRole.__dict__}')
-    return {'message': 'Bienvenido Administrador'}
+# # Ruta protegida que requiere un usuario con el rol "admin"
+# @router.get('/admin')
+# async def admin_route(userRole: User = Depends(has_roles(['admin']))):
+#     print(f'userRole: {userRole.__dict__}')
+#     return {'message': 'Bienvenido Administrador'}
