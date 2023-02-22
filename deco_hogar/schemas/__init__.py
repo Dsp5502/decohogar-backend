@@ -6,3 +6,9 @@ from .user_schemas import UserClientResponseModel
 
 from .client_schemas import ClientRequestModel
 from .client_schemas import ClientResponseModel
+
+from .item_schemas import ItemRequestModel
+from .item_schemas import ItemResponseModel
+
+from .sale_schemas import SaleRequestModel
+from .sale_schemas import SaleResponseModel

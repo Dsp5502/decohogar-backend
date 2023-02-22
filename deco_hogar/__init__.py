@@ -13,7 +13,7 @@ from .models import Client
 from .models import Item, ClientItem, Sale
 from .models import FrequencyPayment, Payment
 
-from .routers import users, clients_router
+from .routers import users, clients_router, items_router, sales_router
 
 from .common import create_acces_token
 
@@ -34,6 +34,8 @@ api_v1 = APIRouter(prefix='/api/v1')
 
 api_v1.include_router(users.router)
 api_v1.include_router(clients_router)
+api_v1.include_router(items_router)
+api_v1.include_router(sales_router)
 
 
 @api_v1.post('/auth')
