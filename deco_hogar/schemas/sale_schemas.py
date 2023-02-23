@@ -1,8 +1,11 @@
 from pydantic import BaseModel, validator
 
+from typing import Dict, Any
+
 from typing import List
 
 from .response_model import ResponseModel
+from .client_schemas import ClientResponseModel
 
 
 class ItemRequestModel(BaseModel):
@@ -52,3 +55,16 @@ class SaleResponseModel(ResponseModel):
     id: int
     total_price: float
     frequency_payment_id: FrequencyPaymentResponseModel
+
+
+class ItemModel(ResponseModel):
+    id: int
+    quantity: int
+
+
+class SaleListResponseModel(ResponseModel):
+    id: int
+    total_price: float
+    frequency_payment_id: FrequencyPaymentResponseModel
+    client_id: ClientResponseModel
+    products: List[ItemModel]

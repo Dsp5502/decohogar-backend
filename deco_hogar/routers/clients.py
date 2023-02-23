@@ -11,6 +11,8 @@ from ..common import has_roles
 
 from ..schemas import ClientResponseModel, ClientRequestModel
 
+from ..services import update_client_service
+
 router = APIRouter(prefix='/clients')
 
 
@@ -48,22 +50,7 @@ async def get_client(client_id: int, userRole: User = Depends(has_roles(['admin'
 
 @router.put('/update_client/{client_id}', response_model=ClientResponseModel)
 async def update_client(client_id: int, client: ClientRequestModel, userRole: User = Depends(has_roles(['admin', 'user']))):
-    client_updated = update_client(client_id, client, userRole)
-    return client_updated
-
-# ! mover de aqui!!
-
-
-def update_client(client_id, client, userRole):
-    client_updated = Client.get_or_none(
-        Client.id == client_id, Client.user_created_id == userRole.id)
-    if client_updated is None:
-        raise HTTPException(404, 'El cliente no existe')
-    client_updated.name = client.name
-    client_updated.direction = client.direction
-    client_updated.phone = client.phone
-    client_updated.email = client.email
-    client_updated.save()
+    client_updated = update_client_service(client_id, client, userRole)
     return client_updated
 
 
