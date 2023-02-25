@@ -4,6 +4,7 @@ from fastapi import Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import HTTPException
 from fastapi import status
+from fastapi.middleware.cors import CORSMiddleware
 
 
 from .database import database as connection
@@ -29,6 +30,17 @@ app = FastAPI(
     description="API para el proyecto de Deco-Hogar",
     version="0.1.0",
 )
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 api_v1 = APIRouter(prefix='/api/v1')
 
