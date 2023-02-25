@@ -18,6 +18,8 @@ from ..models import Sale
 
 from ..schemas import SaleRequestModel, SaleResponseModel, SaleListResponseModel, ItemModel
 
+from ..services import SaleService
+
 
 from ..common import has_roles
 
@@ -28,6 +30,8 @@ router = APIRouter(prefix='/sales')
 
 @router.post('/create_sale', response_model=SaleResponseModel)
 async def create_sale(sale: SaleRequestModel, userRole: User = Depends(has_roles(['admin', 'user']))):
+    return SaleService.create_sale_service(sale, userRole)
+
     try:
         if Client.get_or_none(Client.id == sale.client_id) is None:
             raise HTTPException(404, 'El cliente no existe')
@@ -77,81 +81,14 @@ async def create_sale(sale: SaleRequestModel, userRole: User = Depends(has_roles
 
 @router.get('/get_sales', response_model=List[SaleListResponseModel])
 async def get_sales(page: int = 1, limit: int = 10, userRole: User = Depends(has_roles(['admin', 'user']))):
-    try:
-        sales = Sale.select().paginate(page, limit)
-        sales_list = []
-        for sale in sales:
-            sale_items = ClientItem.select().where(
-                ClientItem.sale_id == sale.id)
-            item_list = []
-            for sale_item in sale_items:
-                item = ItemModel(
-                    id=sale_item.id,
-                    quantity=sale_item.quantity
-                )
-                item_list.append(item)
-            sale_response_model = SaleListResponseModel(
-                id=sale.id,
-                total_price=sale.total_price,
-                frequency_payment_id=sale.frequency_payment_id,
-                client_id=sale.client_id,
-                products=item_list
-            )
-            sales_list.append(sale_response_model)
-        return sales_list
-    except Exception as e:
-        logger.exception("Error al obtener ventas: %s", str(e))
-        raise HTTPException(
-            500, 'Ocurrió un error al obtener ventas, por favor inténtelo de nuevo más tarde.')
+    return SaleService.get_sales_service(page, limit)
 
 
 @router.get('/get_sale/{sale_id}', response_model=SaleListResponseModel)
 async def get_sale(sale_id: int, userRole: User = Depends(has_roles(['admin', 'user']))):
-    try:
-        sale = Sale.get_or_none(Sale.id == sale_id)
-        if sale is None:
-            raise HTTPException(404, 'La venta no existe')
-        sale_items = ClientItem.select().where(
-            ClientItem.sale_id == sale.id)
-        item_list = []
-        for sale_item in sale_items:
-            item = ItemModel(
-                id=sale_item.id,
-                quantity=sale_item.quantity
-            )
-            item_list.append(item)
-        sale_response_model = SaleListResponseModel(
-            id=sale.id,
-            total_price=sale.total_price,
-            frequency_payment_id=sale.frequency_payment_id,
-            client_id=sale.client_id,
-            products=item_list
-        )
-        return sale_response_model
-    except Exception as e:
-        logger.exception("Error al obtener venta: %s", str(e))
-        raise HTTPException(
-            500, 'Ocurrió un error al obtener venta, por favor inténtelo de nuevo más tarde.')
+    return SaleService.get_sale_service(sale_id)
 
 
 @router.delete('/delete_sale/{sale_id}')
 async def delete_sale(sale_id: int, return_stock: bool = False,  userRole: User = Depends(has_roles(['admin']))):
-    try:
-        sale = Sale.get_or_none(Sale.id == sale_id)
-        if sale is None:
-            raise HTTPException(404, 'La venta no existe')
-        sale_items = ClientItem.select().where(
-            ClientItem.sale_id == sale.id)
-        for sale_item in sale_items:
-            sale_item.delete_instance()
-            # Actualizar stock
-            if return_stock:
-                item_update = Item.update(
-                    stock=Item.stock + sale_item.quantity).where(Item.id == sale_item.item_id)
-                item_update.execute()
-        sale.delete_instance()
-        return {'message': 'Venta eliminada correctamente'}
-    except Exception as e:
-        logger.exception("Error al eliminar venta: %s", str(e))
-        raise HTTPException(
-            500, 'Ocurrió un error al eliminar venta, por favor inténtelo de nuevo más tarde.')
+    return SaleService.delete_sale_service(sale_id, return_stock)

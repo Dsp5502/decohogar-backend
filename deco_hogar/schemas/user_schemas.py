@@ -1,8 +1,12 @@
+from peewee import DoesNotExist
+
 from pydantic import BaseModel, validator
 
 from typing import List
 
 from .response_model import ResponseModel
+
+from ..models import User
 
 
 class RoleRequestModel(BaseModel):
@@ -29,7 +33,26 @@ class UserRequestModel(BaseModel):
         if len(username) < 3 or len(username) > 50:
             raise ValueError(
                 'El nombre de usuario debe tener entre 3 y 50 caracteres')
+        elif " " in username:
+            raise ValueError('El nombre de usuario no puede contener espacios')
+        try:
+            User.get(User.username == username)
+            raise ValueError('El nombre de usuario ya existe')
+        except DoesNotExist:
+            pass
         return username
+
+    @validator('password')
+    def password_validation(cls, password):
+        if len(password) < 8:
+            raise ValueError('La contraseña debe tener al menos 8 caracteres')
+        elif not any(char.isupper() for char in password):
+            raise ValueError(
+                'La contraseña debe tener al menos una letra mayúscula')
+        elif not any(char in "!@#$%^&*()-+_" for char in password):
+            raise ValueError(
+                'La contraseña debe tener al menos un carácter especial')
+        return password
 
 
 class UserResponseModel(ResponseModel):
