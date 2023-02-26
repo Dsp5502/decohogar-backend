@@ -1,3 +1,4 @@
+import os
 import jwt
 
 from typing import List
@@ -13,9 +14,14 @@ from .models import User
 from datetime import datetime, timedelta
 
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
 # Constants
 
-SECRET_KEY = 'your_secret_key'
+SECRET_KEY = os.getenv("SECRET_KEY")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/api/v1/auth')
 security = HTTPBearer()
 
