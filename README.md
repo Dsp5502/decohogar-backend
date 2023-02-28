@@ -1,3 +1,12 @@
+[![wakatime](https://wakatime.com/badge/user/54d759a2-12d9-48b4-9e4e-88518abe7706/project/95af36b6-344b-4adb-8df2-96a3b6d8533b.svg)](https://wakatime.com/badge/user/54d759a2-12d9-48b4-9e4e-88518abe7706/project/95af36b6-344b-4adb-8df2-96a3b6d8533b)
+
+# Acceder a la documentación de la API
+
+La documentación de la API está desplegada en la siguiente dirección IP:
+[Deco-Hogar](http://206.81.9.7/docs)
+
+En la documentación de la API, podrás encontrar toda la información necesaria para consumir los endpoints de la aplicación. También podrás realizar pruebas de las diferentes funcionalidades de la API directamente desde la página de documentación.
+
 # Cómo ejecutar el proyecto de manera local
 
 ## Requisitos previos
