@@ -27,7 +27,7 @@ from playhouse.migrate import migrate
 
 app = FastAPI(
     title="Deco-Hogar",
-    description="API para el proyecto de Deco-Hogar",
+    description="API para el proyecto de Deco-Hogar, podrás encontrar toda la información necesaria para consumir los endpoints de la aplicación. También podrás realizar pruebas de las diferentes funcionalidades de la API directamente desde la página de documentación.",
     version="0.1.0",
 )
 
