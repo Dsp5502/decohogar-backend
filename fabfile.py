@@ -16,3 +16,5 @@ def deploy(c: Connection):
     c.sudo('systemctl restart nginx')
 
     print('Deployed!')
+
+    c.sudo('systemctl status decohogar-backend')
