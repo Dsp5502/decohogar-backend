@@ -27,7 +27,7 @@ from playhouse.migrate import migrate
 
 app = FastAPI(
     title="Deco-Hogar",
-    description="API para el proyecto de Deco-Hogar, podrás encontrar toda la información necesaria para consumir los endpoints de la aplicación. También podrás realizar pruebas de las diferentes funcionalidades de la API directamente desde la página de documentación.",
+    description="El proyecto DecoHogar cuenta con un API que permite crear y gestionar usuarios con roles de administrador o usuario, los cuales pueden autenticarse y crear clientes e items. Además, a partir de la creación de clientes e items, los usuarios pueden generar ventas. En el API, es posible realizar el CRUD (crear, leer, actualizar y eliminar) de estas funcionalidades. Si estás interesado en conocer más sobre el código del proyecto, puedes acceder al repositorio alojado en https://github.com/Dsp5502/decohogar-backend.",
     version="0.1.0",
 )
 
